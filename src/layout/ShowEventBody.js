@@ -88,7 +88,7 @@ class HomeBody extends Component {
                 <Typography variant="body1" style={{color:"#42a5f5"}}><b>Rp.{this.props.one.price}</b></Typography>
                 </Grid>
                 <Grid item xs={6} align="right">
-                <Button onClick={this.handleOrder} style={{color:"#42a5f5", borderColor:"#42a5f5"}} variant="outlined"><b>Order</b></Button>
+                <Link></Link><Button onClick={this.handleOrder} style={{color:"#42a5f5", borderColor:"#42a5f5"}} variant="outlined"><b>Order</b></Button>
                 </Grid>
             </Grid>
             </div>
