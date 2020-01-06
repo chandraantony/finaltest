@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import Nav from '../layout/Nav'
 import LoginNav from '../layout/LoginNav'
-import HomeBody from '../layout/HomeBody'
 import setAuth from '../util/Authorization'
-import Ticket from '../layout/Ticket'
 import Footer from '../layout/Footer'
+import ProfileBody from '../layout/ProfilleBody'
+import Favorite from '../layout/Favorite'
 import Menu from '../layout/Menu'
 
-class MyTicket extends Component {
+class Profile extends Component {
     render() {
         const id =  localStorage.getItem('User-Id');
         let Navigation;
@@ -21,13 +21,14 @@ class MyTicket extends Component {
         }
         return (
             <div style={{backgroundColor:"#f2f2f2"}}>
-                {Navigation}
-                {NavigationBar}
-                <Ticket></Ticket>
-                <Footer></Footer>
+            {Navigation}
+            {NavigationBar}
+            <ProfileBody/>
+            <Favorite/>
+            <Footer/>
             </div>
         )
     }
 }
 
-export default  MyTicket
+export default Profile

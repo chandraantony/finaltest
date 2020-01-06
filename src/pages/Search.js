@@ -1,9 +1,6 @@
 import React, { Component } from 'react'
-import Nav from '../layout/Nav'
-import LoginNav from '../layout/LoginNav'
 
-class Order extends Component {
-    
+class Search extends Component {
     render() {
         return (
             <div>
@@ -13,4 +10,4 @@ class Order extends Component {
     }
 }
 
-export default Order
+export default Search

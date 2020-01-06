@@ -10,8 +10,13 @@ import CardMedia from '@material-ui/core/CardMedia';
 import {Link} from 'react-router-dom';
 import { connect } from 'react-redux';
 import {fetchOneCategory} from '../_action/categoryAction'
-
+import Moment from 'react-moment';
+import Button from '@material-ui/core/Button'
+import Truncate from 'react-truncate'
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import Grid from '@material-ui/core/Grid';
+import moment from 'moment'
 
 
 const useStyles = (theme => ({
@@ -25,8 +30,27 @@ const useStyles = (theme => ({
         height: 50,
     },
     newmedia: {
-        height: 150,
+        height: 200,
     },
+    overlay: {
+        position: 'absolute',
+        top: '20px',
+        right: '10px',
+        color: 'black',
+        backgroundColor: 'white',
+        borderRadius : 20
+    },
+    containerwidht : {
+        maxWidth : '90%'
+    },
+    spacemargin :{
+        padding: theme.spacing(3),
+      
+    },
+    btnsize :{
+        maxWidth: '40px', maxHeight: '40px', minWidth: '40px', minHeight: '40px',maxHeight: '40px',
+        borderRadius: 50,
+    }
       
   }));
 
@@ -34,41 +58,92 @@ const useStyles = (theme => ({
 
 class HomeBody extends Component {
 
+    constructor(){
+        super();
+        this.state = {
+            newdate : 'asdasdsad',
+        }
+    }
+
+    search = (event)  =>{
+        console.log(this.state.newdate)
+        if(event.target.value == ""){
+                this.setState({
+                    newdate : event.target.value
+                })
+            }
+            console.log(this.state.newdate)
+    }
+    
     componentDidMount(){
         const id = this.props.id;
         console.log(id);
         this.props.dispatch(fetchOneCategory(id))
     }
 
+
+
     render() {
         const {classes} = this.props;
+        const date = String(this.state.newdate);
+        console.log(date)
         return (
             <Container  maxWidth="md" style={{paddingTop : "100px"}}>
-            <div style={{paddingTop : "100px"}} >
-            <Typography variant="h4" style={{color:"#42a5f5"}}><b>Event</b></Typography>
+            <div >
+            <TextField
+                    label="Search"
+                    placeholder="Search Ticket"
+                    onChange={this.search}
+                    type="datetime-local"
+                    fullWidth
+                    margin="normal"
+                    InputLabelProps={{
+                    shrink: true,
+                    }}
+            />   
             <br/>
             <br/>
             <br/>
             <Grid container spacing={3}>
-            {this.props.one.map(section => ( 
-                <Grid item xs={4} key={section.id}>
-                <Card className={classes.card} elevation={0}>
-                    <Link to={``} style={{textDecoration: "none", color:"#42a5f5"}}>
-                    <CardActionArea>
-                    <CardMedia
-                        className={classes.newmedia}
-                        image={section.image}
-                        title="Contemplative Reptile"
-                        label="asdasdasd"
-                    />
-                    <Typography gutterBottom variant="subtitle1" component="h2">
-                        {section.title}
+            {this.props.one.map(section =>(
+                    <Grid  item sm={4} xs={12} key={section.id} >
+                    <Card className={classes.card} variant="outlined">
+                        <Link to={`/event/${section.id}`} style={{textDecoration: "none", color:"#e91e63"}}>
+                        <CardActionArea>
+                        <CardMedia
+                            className={classes.newmedia}
+                            image={section.image}
+                            title={section.title}
+                        />
+                        <div className={classes.overlay}>
+                            <Typography className={classes.spacemargin} variant="caption" style={{color:"#e91e63"}}>{section.price === 0 ? 'Rp. Free' : `Rp. ${section.price}` }</Typography> 
+                        </div>
+                        </CardActionArea>
+                        </Link>
+                    <div className={classes.spacemargin} >
+                    <Grid container style={{minHeight: '150px'}} align="left">
+                        <Grid item xs={10}  >
+                            <Typography variant="subtitle1" >
+                            <b>{section.title}</b>
+                            <br/>
+                            <b ><Moment format="DD MMM YYYY" style={{color:"#e91e63"}}>{section.date_start}</Moment></b>
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={2} align="right">
+                            <Button className={classes.btnsize}  color="secondary" variant="outlined" aria-label="add to shopping cart" >
+                               <FavoriteBorderIcon/> 
+                            </Button>
+                        </Grid>
+                        <Typography variant="body2" color="textSecondary" display='block' noWrap>
+                            <Truncate lines={3}>
+                            {section.description}
+                            </Truncate>
                     </Typography>
-                    </CardActionArea>
-                    </Link>
-                </Card>
-                </Grid>     
-            ),)} 
+                    </Grid>
+                    </div>    
+                    </Card>
+                    </Grid>     
+                ),)} 
             </Grid>
             </div>
           </Container>

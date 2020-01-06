@@ -1,11 +1,24 @@
 import React, { Component } from 'react'
+import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import {Link} from 'react-router-dom';
-import axios from 'axios'
+import {Link} from 'react-router-dom'
+import axios from 'axios';
 import setAuth from '../util/Authorization'
+import Dialog from '@material-ui/core/Dialog'
+import Input from '@material-ui/core/Input';
+import FilledInput from '@material-ui/core/FilledInput';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
+import InputLabel from '@material-ui/core/InputLabel';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import IconButton from '@material-ui/core/IconButton'
+import CloseIcon from '@material-ui/icons/Close';
 
 class Login extends Component {
     constructor(){
@@ -22,6 +35,18 @@ class Login extends Component {
         }
         console.log(this.state.login)
       }      
+
+      openDialog = () =>{
+        this.setState({
+            open : true
+        })
+      }
+
+      closeDialog = () => {
+        this.setState({
+            open :false
+        })
+      }
 
       handleChangeUser = (event) => {
         this.setState({
@@ -50,6 +75,7 @@ class Login extends Component {
       handleSignup = (event) => {
         axios.post('http://localhost:5000/api/v1/register', {
           name : this.state.name,
+          username : this.state.username,
           email: this.state.email,
           password: this.state.password
         })
@@ -67,6 +93,9 @@ class Login extends Component {
             window.location.href='/home';
           }else{
             console.log(res.data)
+            this.setState({
+              salah : 'Email Sudah Terdaftar'
+            })
           }
     
         })
@@ -77,24 +106,23 @@ class Login extends Component {
       }
       
 
-
-
-
     render() {
         return (
+          <div>
+            <Button variant="outlined" style={{color:"white", borderColor:"white"}} onClick={this.openDialog}><b>Sign Up</b></Button>
+              <Dialog open={this.state.open} onClose={this.closeDialog}>
                 <Grid
                 container
                 spacing={0}
-                direction="column"
-                alignItems="center"
-                justify="center"
-                style={{ minHeight: '100vh' }}
                 >
+                <Grid container direction="row">
+                    <Grid item xs={12} sm={1} style={{backgroundColor :"#880e4f"}}>
 
-                <Grid item xs={4}>
-                   <Typography variant="h4" align="center" style={{color :"#42a5f5"}}><b>Sign-UP</b></Typography>
-                   <br/>
-                   <form>
+                    </Grid>
+                    <Grid item xs={12} sm={10} style={{paddingBottom : "100px",paddingTop:"50px" , paddingLeft:"10pt", paddingRight:"10pt"}}>
+                    <Typography variant="h4" align="center" style={{color :"#e91e63"}}><b>Sign-Up</b></Typography>
+                   <p align="center"><font color="red">{this.state.salah}</font></p>
+                   <form onSubmit={this.handleSignup}>
                    <TextField
                     id="outlined-full-width"
                     onChange = {this.handleChangeUser}
@@ -144,15 +172,21 @@ class Login extends Component {
                     variant="outlined"
                     required
                     />
-                <br/>
-                <div style ={{flex: '1' , flexDirection : 'column', display : 'flex', textDecoration : "none"}} >
-                <Button type="submit" onClick={this.handleSignup} style={{marginTop : "10pt"}} variant="outlined">Sign-Up</Button></div>
-                </form>
-                <Link to="/login" style ={{flex: '1' , flexDirection : 'column', display : 'flex', textDecoration : "none"}} ><Button style={{marginTop : "10pt", borderColor: "#42a5f5", color:"#42a5f5"}} variant="outlined">Sign-In</Button></Link>
-                <Link to="/home" style={{textDecoration :"none"}}><Button style={{marginTop : "10pt"}}>Back HOME</Button></Link>
-                </Grid>   
-
+                    <br/>
+                    <div style={{flex: '1' , flexDirection : 'column', display : 'flex'}}>
+                    <Button style={{color:"#e91e63" , borderColor : "#e91e63"}} size="large"  type="submit" variant="outlined">Sign-Up</Button>
+                    </div>
+                    </form>              
+                    </Grid>
+                    <Grid item xs={12} sm={1}>
+                      <IconButton onClick={this.closeDialog}>
+                        <CloseIcon />
+                      </IconButton>
+                    </Grid>
+                </Grid>
                 </Grid> 
+                </Dialog>
+          </div>
         )
     }
 }
